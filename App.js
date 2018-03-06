@@ -1,20 +1,20 @@
 import React from 'react';
 import { ListView, StyleSheet, View } from 'react-native';
-import { Body, Title, Right, Container, Header, Content, Button, Icon, List, ListItem, Text } from 'native-base';
+import { Body, Title, Right, Container, Header, Content, Thumbnail, Button, Icon, List, ListItem, Text } from 'native-base';
 
 export default class App extends React.Component {
   constructor() {
     super();
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
-      ideas: []
+      dogs: []
     }
   }
 
-  // Retrieve the list of ideas from Airtable
-  getIdeas() {
+  // Retrieve the list of dogs from Airtable
+  getDogs() {
     // Airtable API endpoint, replace with your own
-    let airtableUrl = "https://api.airtable.com/v0/appVgv2Xwhor2ELI1/ideas?&view=Grid%20view";
+    let airtableUrl = "https://api.airtable.com/v0/appVgv2Xwhor2ELI1/dogs?&view=Grid%20view";
 
     // Needed for Airtable authorization, replace with your own API key
     let requestOptions = {
@@ -29,23 +29,23 @@ export default class App extends React.Component {
     // Make the request
     fetch(request).then(response => response.json()).then(json => {
       this.setState({
-        ideas: json.records
+        dogs: json.records
       });
     });
   }
 
   // Runs when the application loads (i.e. the "App" component "mounts")
   componentDidMount() {
-    this.getIdeas(); // refresh the list when we're done
+    this.getDogs(); // refresh the list when we're done
   }
 
   // Upvote an idea
-  upvoteIdea(data, secId, rowId, rowMap) {
+  upvoteDog(data, secId, rowId, rowMap) {
     // Slide the row back into place
     rowMap[`${secId}${rowId}`].props.closeRow();
 
     // Airtable API endpoint
-    let airtableUrl = "https://api.airtable.com/v0/appVgv2Xwhor2ELI1/ideas/" + data.id;
+    let airtableUrl = "https://api.airtable.com/v0/appVgv2Xwhor2ELI1/dogs/" + data.id;
 
     // Needed for Airtable authorization
     let requestOptions = {
@@ -66,7 +66,7 @@ export default class App extends React.Component {
 
     // Make the request
     fetch(request).then(response => response.json()).then(json => {
-      this.getIdeas(); // refresh the list when we're done
+      this.getDogs(); // refresh the list when we're done
     });
   }
 
@@ -76,7 +76,7 @@ export default class App extends React.Component {
     rowMap[`${secId}${rowId}`].props.closeRow();
 
     // Airtable API endpoint
-    let airtableUrl = "https://api.airtable.com/v0/appVgv2Xwhor2ELI1/ideas/" + data.id;
+    let airtableUrl = "https://api.airtable.com/v0/appVgv2Xwhor2ELI1/dogs/" + data.id;
 
     // Needed for Airtable authorization
     let requestOptions = {
@@ -97,7 +97,7 @@ export default class App extends React.Component {
 
     // Make the request
     fetch(request).then(response => response.json()).then(json => {
-      this.getIdeas(); // refresh the list when we're done
+      this.getDogs(); // refresh the list when we're done
     });
   }
 
@@ -107,26 +107,26 @@ export default class App extends React.Component {
     rowMap[`${secId}${rowId}`].props.closeRow();
 
     // Create a new array that has the idea removed
-    let newIdeasData = this.state.ideas.slice();
-    newIdeasData.splice(rowId, 1);
+    let newDogsData = this.state.dogs.slice();
+    newDogsData.splice(rowId, 1);
 
     // Set state
     this.setState({
-      ideas: newIdeasData
+      dogs: newDogsData
     });
   }
 
   // Delete an idea
-  deleteIdea(data, secId, rowId, rowMap) {
+  deleteDog(data, secId, rowId, rowMap) {
     // Slide the row back into place
     rowMap[`${secId}${rowId}`].props.closeRow();
 
     // Create a new array that has the idea removed
-    let newIdeasData = this.state.ideas.slice();
-    newIdeasData.splice(rowId, 1);
+    let newDogsData = this.state.dogs.slice();
+    newDogsData.splice(rowId, 1);
 
     // Airtable API endpoint
-    let airtableUrl = "https://api.airtable.com/v0/appVgv2Xwhor2ELI1/ideas/" + data.id;
+    let airtableUrl = "https://api.airtable.com/v0/appVgv2Xwhor2ELI1/dogs/" + data.id;
 
     // Needed for Airtable authorization
     let requestOptions = {
@@ -142,7 +142,7 @@ export default class App extends React.Component {
 
     // Make the request
     fetch(request).then(response => response.json()).then(json => {
-      this.getIdeas(); // refresh the list when we're done
+      this.getDogs(); // refresh the list when we're done
     });
   }
 
@@ -151,7 +151,10 @@ export default class App extends React.Component {
     return (
       <ListItem style={{ paddingLeft: 20, paddingRight: 20 }}>
         <Body>
-          <Text>{data.fields.description}</Text>
+          <Thumbnail square source={{uri: 'https://metrouk2.files.wordpress.com/2017/03/512366437.jpg?w=748&h=498&crop=1'}} />
+        </Body>
+        <Body>
+          <Text>{data.fields.name}</Text>
         </Body>
         <Right>
           <Text note>{data.fields.votes} votes</Text>
@@ -163,7 +166,7 @@ export default class App extends React.Component {
   // The UI for what appears when you swipe right
   renderSwipeRight(data, secId, rowId, rowMap) {
     return (
-      <Button full success onPress={() => this.upvoteIdea(data, secId, rowId, rowMap)}>
+      <Button full success onPress={() => this.upvoteDog(data, secId, rowId, rowMap)}>
         <Icon active name="thumbs-up" />
       </Button>
     )
@@ -172,14 +175,14 @@ export default class App extends React.Component {
   // The UI for what appears when you swipe left
   renderSwipeLeft(data, secId, rowId, rowMap) {
     return (
-      <Button full danger onPress={() => this.deleteIdea(data, secId, rowId, rowMap)}>
+      <Button full danger onPress={() => this.deleteDog(data, secId, rowId, rowMap)}>
         <Icon active name="thumbs-down" />
       </Button>
     )
   }
 
   render() {
-    let rows = this.ds.cloneWithRows(this.state.ideas);
+    let rows = this.ds.cloneWithRows(this.state.dogs);
     return (
       <Container>
         <Header>
