@@ -151,13 +151,13 @@ export default class App extends React.Component {
     return (
       <ListItem style={{ paddingLeft: 20, paddingRight: 20 }}>
         <Body>
-          <Thumbnail square source={{uri: 'https://metrouk2.files.wordpress.com/2017/03/512366437.jpg?w=748&h=498&crop=1'}} />
+          <Thumbnail square source={{uri: data.fields.photo}} />
         </Body>
         <Body>
           <Text>{data.fields.name}</Text>
         </Body>
         <Right>
-          <Text note>{data.fields.votes} votes</Text>
+          <Text note>{data.fields.votes} </Text>
         </Right>
       </ListItem>
     )
@@ -167,7 +167,7 @@ export default class App extends React.Component {
   renderSwipeRight(data, secId, rowId, rowMap) {
     return (
       <Button full success onPress={() => this.upvoteDog(data, secId, rowId, rowMap)}>
-        <Icon active name="thumbs-up" />
+        <Icon active name="happy" style={{fontSize: 45}}/>
       </Button>
     )
   }
@@ -176,7 +176,7 @@ export default class App extends React.Component {
   renderSwipeLeft(data, secId, rowId, rowMap) {
     return (
       <Button full danger onPress={() => this.deleteDog(data, secId, rowId, rowMap)}>
-        <Icon active name="thumbs-down" />
+        <Icon active name="close" style={{fontSize: 45}}/>
       </Button>
     )
   }
@@ -187,7 +187,7 @@ export default class App extends React.Component {
       <Container>
         <Header>
           <Body>
-            <Title>Stinder</Title>
+            <Title>PupPics</Title>
           </Body>
         </Header>
         <Content>
